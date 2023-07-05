@@ -11,10 +11,7 @@ Tested with Jellyfin 10.8.10 and Windows 11. Please note that newer versions are
 5. Install the browser extension called "Tampermonkey BETA."
 6. Edit `userscript.js`:
     1. Change `localhost:8096` to the host address of your Jellyfin server.
-<<<<<<< HEAD
     2. If you don't want the script to mark the media as watched after clicking play, you can comment out or remove the code from lines 28-31.
-=======
->>>>>>> 7d3939bed2fe0ec1cfb6722bf9a42d8bcc9bc6a0
     3. To prevent the script from opening a new tab/window, ensure you allow popups in your browser for the Jellyfin host link you set in step 1.
     4. Ensuring the video path displayed in your Jellyfin webpage corresponds to the actual location on your computer can be a bit tricky. If you're using the script on the same computer that runs the Jellyfin server, you can skip to step 4. Otherwise, follow these instructions:
        - Right-click on a blank area of the "This computer" window.
