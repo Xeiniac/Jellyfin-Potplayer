@@ -16,7 +16,8 @@ Tested with Jellyfin 10.5.2 and Windows 10. Newer version is not promised to wor
     ```
     path = path.replace('D:', 'Z:');
     ```
-    4. Choose "Add a new script" in the `Tampermonkey` menu. Copy and paste the whole script. Make sure you enabled the script and when you open Jellyfin, the script is enabled.
+    4. You can comment out or remove the code from lines 21-24 if you don't want it to mark it as watched after you click play
+    5. Choose "Add a new script" in the `Tampermonkey` menu. Copy and paste the whole script. Make sure you enabled the script and when you open Jellyfin, the script is enabled.
 7. Test by clicking on the play button! It should work fine now. Enjoy your movies!
 
 ## How it works
