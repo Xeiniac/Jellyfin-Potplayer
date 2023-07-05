@@ -12,17 +12,16 @@ Tested with Jellyfin 10.8.10 and Windows 11. Please note that newer versions are
 6. Edit `userscript.js`:
     1. Change `localhost:8096` to the host address of your Jellyfin server.
     2. If you don't want the script to mark the media as watched after clicking play, you can comment out or remove the code from lines 28-31.
-    3. To prevent the script from opening a new tab/window, ensure you allow popups in your browser for the Jellyfin host link you set in step 1.
-    4. Ensuring the video path displayed in your Jellyfin webpage corresponds to the actual location on your computer can be a bit tricky. If you're using the script on the same computer that runs the Jellyfin server, you can skip to step 4. Otherwise, follow these instructions:
+    3. Ensuring the video path displayed in your Jellyfin webpage corresponds to the actual location on your computer can be a bit tricky. If you're using the script on the same computer that runs the Jellyfin server, you can skip to step 4. Otherwise, follow these instructions:
        - Right-click on a blank area of the "This computer" window.
        - Choose "Add a network location" (or a similar option, the wording may vary depending on your operating system).
        - Link the drive where you have stored all the videos on your Jellyfin server to a local drive on your current computer.
        - For example, after completing the setup, you should be able to open `D:/folder1/video1.mp4` (on the server) by using `Z:/folder1/video1.mp4` (on your local computer).
-    5. Change line 16 in the script. Uncomment the line by removing the leading double backslash, and change `D:` to the drive letter on your server that corresponds to the drive on your local computer. If you have experience with JavaScript, you can customize this path processing script according to your needs. Just ensure that the path matches your local file path. For example, if you followed the step 2 example, the script should be:
+    4. Change line 16 in the script. Uncomment the line by removing the leading double backslash, and change `D:` to the drive letter on your server that corresponds to the drive on your local computer. If you have experience with JavaScript, you can customize this path processing script according to your needs. Just ensure that the path matches your local file path. For example, if you followed the step 2 example, the script should be:
     ```
     path = path.replace('D:', 'Z:');
     ```
-    6. Choose "Add a new script" in the `Tampermonkey` menu. Copy and paste the entire script, and make sure you enable it. The script should be enabled when you open Jellyfin.
+    5. Choose "Add a new script" in the `Tampermonkey` menu. Copy and paste the entire script, and make sure you enable it. The script should be enabled when you open Jellyfin.
 7. Test the setup by clicking on the play button. It should work fine now. Enjoy your movies!
 
 ## How it works
