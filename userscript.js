@@ -1,38 +1,46 @@
 // ==UserScript==
 // @name         Jellyfin with Potplayer
-// @version      0.1
-// @description  play video with Potplayer
-// @author       Tccoin
+// @version      0.2
+// @description  Play video with Potplayer
+// @author       Tccoin, Xei
 // @match        http://localhost:8096/web/index.html
 // ==/UserScript==
 
 (function() {
 	'use strict';
-	let openPotplayer = async (itemid) => {
-	  let userid = (await ApiClient.getCurrentUser()).Id;
-	  ApiClient.getItem(userid, itemid).then(r => {
+
+	// Open Potplayer with the specified item ID
+	let openPotplayer = async (itemId) => {
+	  let userId = (await ApiClient.getCurrentUser()).Id;
+	  ApiClient.getItem(userId, itemId).then(r => {
 		if (r.Path) {
 		  let path = r.Path.replace(/\\/g, '/');
-		  //path = path.replace('D:', 'Z:');
+		  // path = path.replace('D:', 'Z:'); // Modify the path if needed
 		  console.log(path);
-		  window.open('potplayer://' + path, "_self").blur();
-		  window.focus();
+
+		  // Open Potplayer in the background using a hidden iframe
+		  const iframe = document.createElement('iframe');
+		  iframe.style.display = 'none';
+		  iframe.src = 'potplayer://' + path;
+		  document.body.appendChild(iframe);
+
 		  // Find the button with the specified attributes
-		  let button = document.querySelector('button[is="emby-playstatebutton"][data-played="false"][data-id="' + itemid + '"]');
+		  let button = document.querySelector('button[is="emby-playstatebutton"][data-played="false"][data-id="' + itemId + '"]');
 		  if (button) {
-			  button.click();
+			  button.dispatchEvent(new MouseEvent('click')); // Trigger a mouse click event
 		  }
 		  // End of watched button click
 		} else {
-		  ApiClient.getItems(userid, itemid).then(r => openPotplayer(r.Items[0].Id));
+		  ApiClient.getItems(userId, itemId).then(r => openPotplayer(r.Items[0].Id));
 		}
-	  })
+	  });
 	};
-  
+
+	// Bind event listeners to the play and resume buttons
 	let bindEvent = async () => {
 	  let buttons = [];
 	  let retry = 6 + 1;
-	  while (buttons.length == 0 && retry > 0) {
+	  while (buttons.length === 0 && retry > 0) {
 		await new Promise(resolve => setTimeout(resolve, 500));
 		buttons = document.querySelectorAll('[data-mode=play],[data-mode=resume],[data-action=resume]');
 		retry -= 1;
@@ -55,8 +63,8 @@
 		button.removeAttribute('data-mode');
 		button.addEventListener('click', e => {
 		  e.stopPropagation();
-		  let itemid = /id=(.*?)&serverId/.exec(window.location.hash)[1];
-		  openPotplayer(itemid);
+		  let itemId = /id=(.*?)&serverId/.exec(window.location.hash)[1];
+		  openPotplayer(itemId);
 		});
 	  }
 	  buttons = document.querySelectorAll('[data-action=resume]');
@@ -65,13 +73,14 @@
 		button.addEventListener('click', e => {
 		  e.stopPropagation();
 		  let item = e.target;
-		  while (!item.hasAttribute('data-id')) { item = item.parentNode }
-		  let itemid = item.getAttribute('data-id');
-		  openPotplayer(itemid);
+		  while (!item.hasAttribute('data-id')) { item = item.parentNode; }
+		  let itemId = item.getAttribute('data-id');
+		  openPotplayer(itemId);
 		});
 	  }
 	};
-  
+
+	// Lazy load images when scrolling
 	let lazyload = () => {
 	  let items = document.querySelectorAll('[data-src].lazy');
 	  let y = document.scrollingElement.scrollTop;
@@ -88,13 +97,13 @@
 		item.style.setProperty('background-image', `url("${item.getAttribute('data-src')}")`);
 		item.classList.remove('lazy');
 		item.removeAttribute('data-src');
-	  };
+	  }
 	};
-  
+
 	window.addEventListener('scroll', lazyload);
-  
-	window.addEventListener('viewshow', async() => {
+
+	window.addEventListener('viewshow', async () => {
 	  bindEvent();
 	  window.addEventListener('hashchange', bindEvent);
 	});
-  })();
+})();
