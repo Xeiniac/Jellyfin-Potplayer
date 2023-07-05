@@ -1,33 +1,38 @@
 # Jellyfin-Potplayer
 
-Tested with Jellyfin 10.5.2 and Windows 10. Newer version is not promised to work with this script. If you have any problem, please open an issue and I'll try my best to help you.
+Tested with Jellyfin 10.8.10 and Windows 11. Please note that newer versions are not guaranteed to work with this script. If you encounter any issues, please open an issue on the repository, and I'll do my best to assist you.
 
 ## Installation
 
 1. Download this repository.
-2. Put `potplayer.ps1` somewhere else on your disk (DO NOT delete it even after you finish this tutorial). Edit the Potplayer path in `potplayer.ps1`. Notice that you should use double backslash for divider.
-3. Edit `potplayer.reg`. Change the path to where you put `potplayer.ps1`. Use double backslash also.
-4. Double click `potplayer.reg` and click yes.
-5. Install the extension called `Tampermonkey BETA` in your browser.
-6. Edit `userscript.js`.
-    1. Change `localhost:8096` to the host of your Jellyfin server.
-    2. You can comment out or remove the code from lines 21-24 if you don't want it to mark it as watched after you click play
-    3. This step is tricky... We need to make sure that the path to video showed in your Jellyfin webpage is corresponding to the actual place on your computer. So, if you are using this script on the same computer which runs the Jellyfin server, just skip to step 4. If not, please right click on blank area of "This computer" window and choose "add a network location" (or something like it, I use Chinese for the system so I don't know). Link the drive where you put all the videos on your Jellyfin server to a local drive. For example, after the setup, you should be able to open (for the server) `D:/folder1/video1.mp4` by (on your local computer) `Z:/folder1/video1.mp4`.
-    4.  Change line 16 in the script. Firstly, uncomment the line by deleting the leading double backslash. Then change `D:` to the drive on your server to the drive on your local computer. If you have some experience on Javascript, your can custom this path processing script by your own. Just make sure the path will be same to your local file path. For the example mentioned in step 2, the script should be like:
+2. Place the `potplayer.ps1` file somewhere on your disk. Do not delete it even after completing this tutorial. Edit the Potplayer path in `potplayer.ps1`, ensuring you use a double backslash as the divider.
+3. Edit `potplayer.reg` and change the path to where you saved `potplayer.ps1`. Use a double backslash in the path as well.
+4. Double-click `potplayer.reg` and click "Yes" to proceed with the installation.
+5. Install the browser extension called "Tampermonkey BETA."
+6. Edit `userscript.js`:
+    1. Change `localhost:8096` to the host address of your Jellyfin server.
+    2. If you don't want the script to mark the media as watched after clicking play, you can comment out or remove the code from lines 21-24.
+    3. To prevent the script from opening a new tab/window, ensure you allow popups in your browser for the Jellyfin host link you set in step 1.
+    4. Ensuring the video path displayed in your Jellyfin webpage corresponds to the actual location on your computer can be a bit tricky. If you're using the script on the same computer that runs the Jellyfin server, you can skip to step 4. Otherwise, follow these instructions:
+       - Right-click on a blank area of the "This computer" window.
+       - Choose "Add a network location" (or a similar option, the wording may vary depending on your operating system).
+       - Link the drive where you have stored all the videos on your Jellyfin server to a local drive on your current computer.
+       - For example, after completing the setup, you should be able to open `D:/folder1/video1.mp4` (on the server) by using `Z:/folder1/video1.mp4` (on your local computer).
+    5. Change line 16 in the script. Uncomment the line by removing the leading double backslash, and change `D:` to the drive letter on your server that corresponds to the drive on your local computer. If you have experience with JavaScript, you can customize this path processing script according to your needs. Just ensure that the path matches your local file path. For example, if you followed the step 2 example, the script should be:
     ```
     path = path.replace('D:', 'Z:');
     ```
-    5. Choose "Add a new script" in the `Tampermonkey` menu. Copy and paste the whole script. Make sure you enabled the script and when you open Jellyfin, the script is enabled.
-7. Test by clicking on the play button! It should work fine now. Enjoy your movies!
+    6. Choose "Add a new script" in the `Tampermonkey` menu. Copy and paste the entire script, and make sure you enable it. The script should be enabled when you open Jellyfin.
+7. Test the setup by clicking on the play button. It should work fine now. Enjoy your movies!
 
 ## How it works
 
-A user script modifies the play buttons in Jellyfin so that the web player will not be called. Instead, a link will be opened and it's a "url protocol" for Potplayer. The url protocol will firstly call a powershell script and then pass the video path to Potplayer. That's it!
+This solution utilizes a user script to modify the play buttons in Jellyfin. Instead of using the web player, a link is opened that follows a "url protocol" for Potplayer. This url protocol first calls a PowerShell script, which then passes the video path to Potplayer. That's it!
 
 ## FAQ
 
-### The browser succeed to bring up the PowerShell script but PotPlayer won't start
-This is related to Powershell Execution Policy, please see https://github.com/tccoin/Jellyfin-Potplayer/issues/5 for solution.
+### The browser successfully opens the PowerShell script, but PotPlayer doesn't start
+This issue is related to the PowerShell Execution Policy. Please refer to [this GitHub issue](https://github.com/tccoin/Jellyfin-Potplayer/issues/5) for a solution.
 
 ### Additional backslash at the end of the path in PotPlayer
-See solution in https://github.com/tccoin/Jellyfin-Potplayer/issues/11 (the issue is in Chinese).
+For a solution to the issue with an additional backslash at the end of the path in PotPlayer, please see [this GitHub issue](https://github.com/tccoin/Jellyfin-Potplayer/issues/11). (Note that the issue is in Chinese.)
